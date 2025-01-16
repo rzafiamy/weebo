@@ -60,7 +60,7 @@ class Weebo:
             self.voices = json.load(f)
 
         # init speech recognition model
-        self.whisper_mlx = LightningWhisperMLX(model="tiny", batch_size=12)
+        self.whisper_mlx = LightningWhisperMLX(model="small", batch_size=12)
 
     def _create_vocab(self) -> Dict[str, int]:
         # create mapping of characters/phonemes to integer tokens
