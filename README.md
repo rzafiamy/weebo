@@ -4,6 +4,8 @@ A real-time speech-to-speech chatbot powered by Whisper Small, Llama 3.2, and Ko
 
 Works on Apple Silicon.
 
+Learn more [here](https://amanvir.com/weebo).
+
 ## Features
 
 - Continuous speech recognition using Whisper MLX
