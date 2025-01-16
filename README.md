@@ -18,7 +18,7 @@ Learn more [here](https://amanvir.com/weebo).
 
 Download required models:
 
-- `kokoro-v0_19.onnx` (TTS model)
+- [`kokoro-v0_19.onnx`](https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files/kokoro-v0_19.onnx) (TTS model)
 - Pull the llama3.2 model using Ollama
 
 ## Usage
@@ -26,7 +26,7 @@ Download required models:
 Run the chatbot:
 
 ```bash
-python weebo.py
+python main.py
 ```
 
 The program will start listening for voice input. Speak naturally and wait for a brief pause - the bot will respond with synthesized speech. Press Ctrl+C to stop.
