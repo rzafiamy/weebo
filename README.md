@@ -29,7 +29,7 @@ Download required models:
 Run the chatbot:
 
 ```bash
-uv run --with-requirements requirements.txt main.py
+uv run --python 3.12 --with-requirements requirements.txt main.py
 ```
 
 The program will start listening for voice input. Speak naturally and wait for a brief pause - the bot will respond with synthesized speech. Press Ctrl+C to stop.
