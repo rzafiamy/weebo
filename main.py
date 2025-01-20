@@ -10,6 +10,8 @@ from phonemizer.backend.espeak.wrapper import EspeakWrapper
 import espeakng_loader
 from ollama import chat
 from lightning_whisper_mlx import LightningWhisperMLX
+import signal
+from threading import Event
 
 
 class Weebo:
@@ -37,6 +39,14 @@ class Weebo:
         self._init_espeak()
         self._init_models()
         self.executor = ThreadPoolExecutor(max_workers=self.MAX_THREADS)
+
+        # interrupt handling
+        self.shutdown_event = Event()
+        signal.signal(signal.SIGINT, self._signal_handler)
+
+    def _signal_handler(self, signum, frame):
+        print("\nStopping...")
+        self.shutdown_event.set()
 
     def _init_espeak(self):
         # setup espeak for phoneme generation
@@ -109,6 +119,9 @@ class Weebo:
 
         def callback(indata, frames, time_info, status):
             # callback function that processes incoming audio frames
+            if self.shutdown_event.is_set():
+                raise sd.CallbackStop()
+
             nonlocal audio_buffer, silence_frames, total_frames
 
             if status:
@@ -148,17 +161,23 @@ class Weebo:
                 total_frames = 0
 
         # start recording loop
-        with sd.InputStream(
-            callback=callback,
-            channels=1,
-            samplerate=self.SAMPLE_RATE,
-            dtype=np.float32
-        ):
-            print("Recording... Press Ctrl+C to stop")
-            while True:
-                sd.sleep(100)
+        try:
+            with sd.InputStream(
+                callback=callback,
+                channels=1,
+                samplerate=self.SAMPLE_RATE,
+                dtype=np.float32
+            ):
+                print("Recording... Press Ctrl+C to stop")
+                while not self.shutdown_event.is_set():
+                    sd.sleep(100)
+        except sd.CallbackStop:
+            pass
 
     def create_and_play_response(self, prompt: str):
+        if self.shutdown_event.is_set():
+            return
+
         # stream response from llm
         stream = chat(
             model='llama3.2',
@@ -174,85 +193,92 @@ class Weebo:
         buffer = ""
         curr_str = ""
 
-        # process response stream
-        for chunk in stream:
-            print(chunk)
-            text = chunk['message']['content']
+        try:
+            # process response stream
+            for chunk in stream:
+                if self.shutdown_event.is_set():
+                    break
 
-            if len(text) == 0:
-                self.messages.append({
-                    'role': 'assistant',
-                    'content': curr_str
-                })
-                curr_str = ""
-                print(self.messages)
-                continue
+                print(chunk)
+                text = chunk['message']['content']
 
-            buffer += text
-            curr_str += text
-
-            # find end of sentence to chunk at
-            last_punctuation = max(
-                buffer.rfind('. '),
-                buffer.rfind('? '),
-                buffer.rfind('! ')
-            )
-
-            if last_punctuation == -1:
-                continue
-
-            # handle long chunks
-            while last_punctuation != -1 and last_punctuation >= self.CHUNK_SIZE:
-                last_punctuation = max(
-                    buffer.rfind(', ', 0, last_punctuation),
-                    buffer.rfind('; ', 0, last_punctuation),
-                    buffer.rfind('— ', 0, last_punctuation)
-                )
-
-            if last_punctuation == -1:
-                last_punctuation = buffer.find(' ', 0, self.CHUNK_SIZE)
-
-            # process chunk
-            # convert chunk to audio
-            chunk_text = buffer[:last_punctuation + 1]
-            ph = self.phonemize(chunk_text)
-            futures.append(
-                self.executor.submit(
-                    self.generate_audio,
-                    ph, self.VOICE, self.SPEED
-                )
-            )
-            buffer = buffer[last_punctuation + 1:]
-
-        # process final chunk if any
-        if buffer:
-            ph = self.phonemize(buffer)
-            futures.append(
-                self.executor.submit(
-                    self.generate_audio,
-                    ph, self.VOICE, self.SPEED
-                )
-            )
-
-        # play generated audio
-        with sd.OutputStream(
-            samplerate=self.SAMPLE_RATE,
-            channels=1,
-            dtype=np.float32
-        ) as out_stream:
-            for fut in futures:
-                audio_data = fut.result()
-                if len(audio_data) == 0:
+                if len(text) == 0:
+                    self.messages.append({
+                        'role': 'assistant',
+                        'content': curr_str
+                    })
+                    curr_str = ""
+                    print(self.messages)
                     continue
-                out_stream.write(audio_data.reshape(-1, 1))
+
+                buffer += text
+                curr_str += text
+
+                # find end of sentence to chunk at
+                last_punctuation = max(
+                    buffer.rfind('. '),
+                    buffer.rfind('? '),
+                    buffer.rfind('! ')
+                )
+
+                if last_punctuation == -1:
+                    continue
+
+                # handle long chunks
+                while last_punctuation != -1 and last_punctuation >= self.CHUNK_SIZE:
+                    last_punctuation = max(
+                        buffer.rfind(', ', 0, last_punctuation),
+                        buffer.rfind('; ', 0, last_punctuation),
+                        buffer.rfind('— ', 0, last_punctuation)
+                    )
+
+                if last_punctuation == -1:
+                    last_punctuation = buffer.find(' ', 0, self.CHUNK_SIZE)
+
+                # process chunk
+                # convert chunk to audio
+                chunk_text = buffer[:last_punctuation + 1]
+                ph = self.phonemize(chunk_text)
+                futures.append(
+                    self.executor.submit(
+                        self.generate_audio,
+                        ph, self.VOICE, self.SPEED
+                    )
+                )
+                buffer = buffer[last_punctuation + 1:]
+
+            # process final chunk if any
+            if buffer and not self.shutdown_event.is_set():
+                ph = self.phonemize(buffer)
+                futures.append(
+                    self.executor.submit(
+                        self.generate_audio,
+                        ph, self.VOICE, self.SPEED
+                    )
+                )
+
+            # play generated audio
+            if not self.shutdown_event.is_set():
+                with sd.OutputStream(
+                    samplerate=self.SAMPLE_RATE,
+                    channels=1,
+                    dtype=np.float32
+                ) as out_stream:
+                    for fut in futures:
+                        if self.shutdown_event.is_set():
+                            break
+                        audio_data = fut.result()
+                        if len(audio_data) == 0:
+                            continue
+                        out_stream.write(audio_data.reshape(-1, 1))
+        except Exception as e:
+            if not self.shutdown_event.is_set():
+                raise e
 
 
 def main():
     weebo = Weebo()
-    try:
-        weebo.record_and_transcribe()
-    except KeyboardInterrupt:
-        print("Stopping...")
+    weebo.record_and_transcribe()
 
 
 if __name__ == "__main__":
