@@ -126,6 +126,94 @@ python main.py
 
 The program will start listening for voice input. Speak naturally and wait for a brief pause - the bot will respond with synthesized speech. 🗣️🎧 Press **Ctrl+C** to stop. ❌
 
+
+---
+
+# ⚙️ Advanced configuration
+
+This document provides details on how to configure Weebo using environment variables. Adjust these settings in your `.env` file to customize the behavior of the application.
+
+---
+
+## 🎛️ General Configuration
+
+| Variable           | Default Value | Description |
+|-------------------|--------------|-------------|
+| `ASR_MODEL_SIZE` | `small`      | Size of the speech recognition model. Options: `small`, `medium`, `large-v3`, etc. |
+| `DEVICE`         | `cpu`        | Computing device used for processing. Automatically set to `cuda` if CUDA is enabled. |
+| `COMPUTE_TYPE`   | `int8`       | Precision type. Uses `float16` for CUDA and `int8` otherwise. |
+
+---
+
+## 🎤 Audio Processing
+
+| Variable              | Default Value | Description |
+|----------------------|--------------|-------------|
+| `WHISPER_SAMPLE_RATE` | `16000`       | Sampling rate for Whisper speech recognition. |
+| `SILENCE_THRESHOLD`   | `0.04`        | Threshold for detecting silence. Lower values make it more sensitive. |
+| `SILENCE_DURATION`    | `3`           | Time in seconds before considering silence as an endpoint. |
+
+---
+
+## 🔊 Text-to-Speech (TTS)
+
+| Variable              | Default Value  | Description |
+|----------------------|---------------|-------------|
+| `SAMPLE_RATE`       | `24000`        | Sampling rate for audio output. |
+| `MAX_PHONEME_LENGTH` | `510`         | Maximum phoneme length per chunk. |
+| `CHUNK_SIZE`        | `300`         | Number of phonemes processed per chunk. |
+| `SPEED`             | `1.2`          | Speech speed multiplier. |
+| `VOICE`             | `am_michael`   | Default voice used for TTS. |
+| `NO_VOICE_REPLY`    | `"I'm sorry, I don't understand what you're asking."` | Response when voice output is disabled. |
+
+---
+
+## 🏗️ Processing Configuration
+
+| Variable         | Default Value | Description |
+|-----------------|--------------|-------------|
+| `MAX_THREADS`   | `1`          | Number of threads for parallel processing. |
+
+---
+
+## 🤖 Ollama Model Settings
+
+| Variable         | Default Value  | Description |
+|-----------------|---------------|-------------|
+| `MODEL`         | `gemma3:1B`    | Model used for generating responses. |
+| `MAX_RETRIES`   | `3`           | Maximum number of retries in case of failure. |
+| `RETRY_DELAY`   | `1`           | Delay (in seconds) before retrying a failed request. |
+| `SYSTEM_PROMPT` | *(see below)* | System prompt for AI responses. |
+
+**System Prompt:**
+> "Give a conversational response to the following statement or question in 1-2 sentences. The response should be natural and engaging, and the length depends on what you have to say."
+
+---
+
+## 📂 Paths
+
+| Variable         | Default Value        | Description |
+|-----------------|---------------------|-------------|
+| `TTS_MODEL_PATH` | `kokoro-v0_19.onnx` | Path to the TTS model file. |
+| `VOICES_FILE`   | `voices.json`       | Path to the file containing voice configurations. |
+
+---
+
+## 🖥️ ONNX Configuration
+
+| Variable       | Default Value            | Description |
+|---------------|------------------------|-------------|
+| `ONNX_DEVICE` | `CUDAExecutionProvider` | ONNX execution provider. Options: `CPUExecutionProvider`, `CUDAExecutionProvider`. |
+
+---
+
+## 🔧 How to Modify Configurations
+1. **Edit the `.env` file** in the root directory.
+2. **Update the variables** with your desired values.
+3. **Restart the application** to apply changes:
+   ```bash
+   python main.py
+   ```
 ---
 
 ## 🛠️ Troubleshooting
