@@ -14,7 +14,7 @@ import logging
 
 # Configure logging
 logging.basicConfig(
-    level=logging.DEBUG,  # Capture all levels of logs
+    level=logging.INFO,  # Capture all levels of logs
     format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
     handlers=[
         logging.StreamHandler(),  # Logs to console
@@ -28,7 +28,7 @@ class TextToSpeech:
         self.logger.info("Initializing TextToSpeech...")
         
         try:
-            self.tts_session = onnxruntime.InferenceSession("kokoro-v0_19.onnx", providers=[config.ONNX_DEVICE])
+            self.tts_session = onnxruntime.InferenceSession(config.TTS_MODEL_PATH, providers=[config.ONNX_DEVICE])
             self.vocab = self._create_vocab()
             self._init_espeak()
             with open("voices.json") as f:
@@ -51,10 +51,28 @@ class TextToSpeech:
         chars = ['$'] + list(';:,.!?¡¿—…"«»"" ') + list("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz") + list("ɑɐɒæɓʙβɔɕçɗɖðʤəɘɚɛɜɝɞɟʄɡɠɢʛɦɧħɥʜɨɪʝɭɬɫɮʟɱɯɰŋɳɲɴøɵɸθœɶʘɹɺɾɻʀʁɽʂʃʈʧʉʊʋⱱʌɣɤʍχʎʏʑʐʒʔʡʕʢǀǁǂǃˈˌːˑʼʴʰʱʲʷˠˤ˞↓↑→↗↘'̩'ᵻ")
         return {c: i for i, c in enumerate(chars)}
 
+    def normalize(self, text: str) -> str:
+        """
+        Normalizes the input text by removing characters that are not in the allowed vocabulary.
+        
+        Parameters:
+            text (str): The text to be normalized.
+            
+        Returns:
+            str: The normalized text containing only allowed characters.
+        """
+        allowed_chars = set(self.vocab.keys())
+        normalized_text = "".join(ch for ch in text if ch in allowed_chars)
+        self.logger.debug(f"Normalized text: {normalized_text}")
+        return normalized_text
+        
     def phonemize(self, text: str) -> str:
+        # Normalize the text first to filter out unwanted characters
+        text = self.normalize(text)
         text = re.sub(r"[^\S \n]", " ", text).strip()
         phonemes = phonemizer.phonemize(text, "en-us", preserve_punctuation=True, with_stress=True)
         return "".join(p for p in phonemes if p in self.vocab).strip()
+
 
     def generate_audio(self, phonemes: str, voice: str, speed: float) -> np.ndarray:
         tokens = [self.vocab[p] for p in phonemes if p in self.vocab]

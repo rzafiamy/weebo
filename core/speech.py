@@ -8,7 +8,7 @@ import numpy as np
 
 # Configure logging
 logging.basicConfig(
-    level=logging.DEBUG,  # Capture all levels of logs
+    level=logging.INFO,  # Capture all levels of logs
     format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
     handlers=[
         logging.StreamHandler(),  # Logs to console
