@@ -30,7 +30,6 @@ joblib==1.4.2
 jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
 language-tags==1.2.0
-lightning-whisper-mlx==0.0.10
 llvmlite==0.43.0
 lxml==5.3.0
 Markdown==3.7
@@ -43,6 +42,7 @@ numba==0.60.0
 numpy==2.0.2
 ollama==0.4.6
 onnxruntime==1.19.2
+onnxruntime-gpu
 packaging==24.2
 phonemizer-fork @ git+https://github.com/thewh1teagle/phonemizer-fork@aa26b4cf2c518386a8c2dcea5c6f0866cde10bd3
 protobuf==5.29.3
@@ -73,7 +73,6 @@ typing_extensions==4.12.2
 uritemplate==4.1.1
 urllib3==2.3.0
 zipp==3.21.0
-openai-whisper
 torch
 torchaudio
 ctranslate2>=4.5.0

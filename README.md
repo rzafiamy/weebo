@@ -42,3 +42,21 @@ source .venv/bin/activate
 pip install -r requirements.txt
 python main.py
 ```
+
+
+## FAST WHISPER
+This module need CUDANN9 to work 
+
+Download Installer for Linux Ubuntu 24.04 x86_64
+The base installer is available for download below.
+
+Base Installer	
+Installation Instructions:
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
+sudo dpkg -i cuda-keyring_1.1-1_all.deb
+sudo apt-get update
+sudo apt-get -y install cudnn
+To install for CUDA 11, perform the above configuration but install the CUDA 11 specific package:
+sudo apt-get -y install cudnn-cuda-11
+To install for CUDA 12, perform the above configuration but install the CUDA 12 specific package:
+sudo apt-get -y install cudnn-cuda-12

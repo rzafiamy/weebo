@@ -12,29 +12,43 @@ from typing import Dict, Optional
 from concurrent.futures import ThreadPoolExecutor
 import logging
 
-# Logging Configuration
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,  # Capture all levels of logs
+    format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),  # Logs to console
+        logging.FileHandler("speech_processor.log")  # Logs to file
+    ]
+)
 
 class TextToSpeech:
     def __init__(self):
-        logging.info("Initializing TextToSpeech...")
-        self.tts_session = onnxruntime.InferenceSession("kokoro-v0_19.onnx", providers=["CPUExecutionProvider"])
-        self.vocab = self._create_vocab()
-        self._init_espeak()
-        with open("voices.json") as f:
-            self.voices = json.load(f)
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.logger.info("Initializing TextToSpeech...")
+        
+        try:
+            self.tts_session = onnxruntime.InferenceSession("kokoro-v0_19.onnx", providers=[config.ONNX_DEVICE])
+            self.vocab = self._create_vocab()
+            self._init_espeak()
+            with open("voices.json") as f:
+                self.voices = json.load(f)
+        except Exception as e:
+            self.logger.exception("Error initializing TextToSpeech.")
+            raise
 
     def _init_espeak(self):
-        espeak_data_path = espeakng_loader.get_data_path()
-        espeak_lib_path = espeakng_loader.get_library_path()
-        EspeakWrapper.set_data_path(espeak_data_path)
-        EspeakWrapper.set_library(espeak_lib_path)
+        try:
+            espeak_data_path = espeakng_loader.get_data_path()
+            espeak_lib_path = espeakng_loader.get_library_path()
+            EspeakWrapper.set_data_path(espeak_data_path)
+            EspeakWrapper.set_library(espeak_lib_path)
+        except Exception as e:
+            self.logger.exception("Error initializing eSpeak.")
+            raise
 
     def _create_vocab(self) -> Dict[str, int]:
-        # create mapping of characters/phonemes to integer tokens
-        chars = ['$'] + list(';:,.!?¡¿—…"«»"" ') + \
-            list("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz") + \
-            list("ɑɐɒæɓʙβɔɕçɗɖðʤəɘɚɛɜɝɞɟʄɡɠɢʛɦɧħɥʜɨɪʝɭɬɫɮʟɱɯɰŋɳɲɴøɵɸθœɶʘɹɺɾɻʀʁɽʂʃʈʧʉʊʋⱱʌɣɤʍχʎʏʑʐʒʔʡʕʢǀǁǂǃˈˌːˑʼʴʰʱʲʷˠˤ˞↓↑→↗↘'̩'ᵻ")
+        chars = ['$'] + list(';:,.!?¡¿—…"«»"" ') + list("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz") + list("ɑɐɒæɓʙβɔɕçɗɖðʤəɘɚɛɜɝɞɟʄɡɠɢʛɦɧħɥʜɨɪʝɭɬɫɮʟɱɯɰŋɳɲɴøɵɸθœɶʘɹɺɾɻʀʁɽʂʃʈʧʉʊʋⱱʌɣɤʍχʎʏʑʐʒʔʡʕʢǀǁǂǃˈˌːˑʼʴʰʱʲʷˠˤ˞↓↑→↗↘'̩'ᵻ")
         return {c: i for i, c in enumerate(chars)}
 
     def phonemize(self, text: str) -> str:
@@ -43,7 +57,6 @@ class TextToSpeech:
         return "".join(p for p in phonemes if p in self.vocab).strip()
 
     def generate_audio(self, phonemes: str, voice: str, speed: float) -> np.ndarray:
-        # convert phonemes to audio using TTS model
         tokens = [self.vocab[p] for p in phonemes if p in self.vocab]
         if not tokens:
             return np.array([], dtype=np.float32)

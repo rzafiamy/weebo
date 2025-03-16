@@ -1,0 +1,656 @@
+2025-03-16 19:18:43,466 - DEBUG - httpx - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-03-16 19:18:43,466 - DEBUG - httpx - load_verify_locations cafile='/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/certifi/cacert.pem'
+2025-03-16 19:18:43,478 - INFO - root - Initializing Weebo...
+2025-03-16 19:18:43,478 - INFO - TextToSpeech - Initializing TextToSpeech...
+2025-03-16 19:18:44,512 - INFO - SpeechProcessor - Initializing SpeechProcessor...
+2025-03-16 19:18:44,512 - INFO - SpeechProcessor - Loading Whisper model: medium on cuda with compute type float16
+2025-03-16 19:18:44,561 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): huggingface.co:443
+2025-03-16 19:18:44,715 - DEBUG - urllib3.connectionpool - https://huggingface.co:443 "GET /api/models/Systran/faster-whisper-medium/revision/main HTTP/1.1" 200 2140
+2025-03-16 19:18:45,560 - INFO - ChatBot - Initializing ChatBot...
+2025-03-16 19:18:45,560 - INFO - SpeechProcessor - Starting recording...
+2025-03-16 19:18:48,290 - INFO - faster_whisper - Processing audio with duration 00:04.028
+2025-03-16 19:18:48,691 - INFO - faster_whisper - Detected language 'en' with probability 0.89
+2025-03-16 19:18:48,693 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:18:49,105 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:18:49,105 - INFO - SpeechProcessor - USER:  What's happened to you?
+2025-03-16 19:18:49,105 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:18:49,105 - INFO - root - --------------
+2025-03-16 19:18:49,105 - INFO - root - USER:  What's happened to you?
+2025-03-16 19:18:49,105 - INFO - root - --------------
+2025-03-16 19:18:49,105 - DEBUG - ChatBot - Received prompt:  What's happened to you?
+2025-03-16 19:18:49,106 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:18:49,106 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7c0334319310>
+2025-03-16 19:18:49,106 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:18:49,107 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:18:49,107 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:18:49,107 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:18:49,107 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:18:49,149 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:18:49 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:18:49,149 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:18:49,150 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:18:49,631 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:18:49,631 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:18:49,631 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:18:49,631 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:18:49,631 - INFO - root - --------------
+2025-03-16 19:18:49,631 - INFO - root - BOT: Oh, you know, life’s been a bit of a whirlwind! It’s interesting to think about what’s happened – mostly just learning and growing, really.
+2025-03-16 19:18:49,631 - INFO - root - --------------
+2025-03-16 19:18:49,640 - WARNING - phonemizer - words count mismatch on 200.0% of the lines (2/1)
+2025-03-16 19:18:57,918 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:18:57,920 - ERROR - SpeechProcessor - Error occurred during transcription.
+Traceback (most recent call last):
+  File "/home/cook/Documents/Dev/weebo/core/speech.py", line 77, in audio_callback
+    segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 900, in transcribe
+    ) = self.detect_language(
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1777, in detect_language
+    encoder_output = self.encode(
+                     ^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1358, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA failed with error out of memory
+2025-03-16 19:18:57,923 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:18:57,924 - ERROR - SpeechProcessor - Error occurred during transcription.
+Traceback (most recent call last):
+  File "/home/cook/Documents/Dev/weebo/core/speech.py", line 77, in audio_callback
+    segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 900, in transcribe
+    ) = self.detect_language(
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1777, in detect_language
+    encoder_output = self.encode(
+                     ^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1358, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA failed with error out of memory
+2025-03-16 19:18:57,926 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:18:57,927 - ERROR - SpeechProcessor - Error occurred during transcription.
+Traceback (most recent call last):
+  File "/home/cook/Documents/Dev/weebo/core/speech.py", line 77, in audio_callback
+    segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 900, in transcribe
+    ) = self.detect_language(
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1777, in detect_language
+    encoder_output = self.encode(
+                     ^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1358, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA failed with error out of memory
+2025-03-16 19:18:57,930 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:18:57,931 - ERROR - SpeechProcessor - Error occurred during transcription.
+Traceback (most recent call last):
+  File "/home/cook/Documents/Dev/weebo/core/speech.py", line 77, in audio_callback
+    segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 900, in transcribe
+    ) = self.detect_language(
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1777, in detect_language
+    encoder_output = self.encode(
+                     ^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1358, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA failed with error out of memory
+2025-03-16 19:18:57,936 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:18:57,938 - ERROR - SpeechProcessor - Error occurred during transcription.
+Traceback (most recent call last):
+  File "/home/cook/Documents/Dev/weebo/core/speech.py", line 77, in audio_callback
+    segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 900, in transcribe
+    ) = self.detect_language(
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1777, in detect_language
+    encoder_output = self.encode(
+                     ^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1358, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA failed with error out of memory
+2025-03-16 19:18:57,943 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:18:57,945 - ERROR - SpeechProcessor - Error occurred during transcription.
+Traceback (most recent call last):
+  File "/home/cook/Documents/Dev/weebo/core/speech.py", line 77, in audio_callback
+    segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 900, in transcribe
+    ) = self.detect_language(
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1777, in detect_language
+    encoder_output = self.encode(
+                     ^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1358, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA failed with error out of memory
+2025-03-16 19:18:58,839 - INFO - faster_whisper - Processing audio with duration 00:02.261
+2025-03-16 19:18:58,842 - ERROR - SpeechProcessor - Error occurred during transcription.
+Traceback (most recent call last):
+  File "/home/cook/Documents/Dev/weebo/core/speech.py", line 77, in audio_callback
+    segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 900, in transcribe
+    ) = self.detect_language(
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1777, in detect_language
+    encoder_output = self.encode(
+                     ^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1358, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA failed with error out of memory
+2025-03-16 19:19:00,337 - INFO - faster_whisper - Processing audio with duration 00:02.254
+2025-03-16 19:19:00,340 - ERROR - SpeechProcessor - Error occurred during transcription.
+Traceback (most recent call last):
+  File "/home/cook/Documents/Dev/weebo/core/speech.py", line 77, in audio_callback
+    segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 900, in transcribe
+    ) = self.detect_language(
+        ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1777, in detect_language
+    encoder_output = self.encode(
+                     ^^^^^^^^^^^^
+  File "/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/faster_whisper/transcribe.py", line 1358, in encode
+    return self.model.encode(features, to_cpu=to_cpu)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA failed with error out of memory
+2025-03-16 19:19:00,707 - WARNING - root - Interruption detected, shutting down...
+2025-03-16 19:19:48,629 - DEBUG - httpx - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-03-16 19:19:48,629 - DEBUG - httpx - load_verify_locations cafile='/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/certifi/cacert.pem'
+2025-03-16 19:19:48,641 - INFO - root - Initializing Weebo...
+2025-03-16 19:19:48,641 - INFO - TextToSpeech - Initializing TextToSpeech...
+2025-03-16 19:19:49,415 - INFO - SpeechProcessor - Initializing SpeechProcessor...
+2025-03-16 19:19:49,415 - INFO - SpeechProcessor - Loading Whisper model: medium on cpu with compute type int8
+2025-03-16 19:19:49,465 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): huggingface.co:443
+2025-03-16 19:19:49,620 - DEBUG - urllib3.connectionpool - https://huggingface.co:443 "GET /api/models/Systran/faster-whisper-medium/revision/main HTTP/1.1" 200 2140
+2025-03-16 19:19:50,634 - INFO - ChatBot - Initializing ChatBot...
+2025-03-16 19:19:50,634 - INFO - SpeechProcessor - Starting recording...
+2025-03-16 19:19:52,596 - INFO - faster_whisper - Processing audio with duration 00:02.872
+2025-03-16 19:19:54,651 - INFO - faster_whisper - Detected language 'en' with probability 0.73
+2025-03-16 19:19:54,653 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:19:56,612 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:19:56,612 - INFO - SpeechProcessor - USER:  Bye!
+2025-03-16 19:19:56,612 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:19:56,612 - INFO - root - --------------
+2025-03-16 19:19:56,612 - INFO - root - USER:  Bye!
+2025-03-16 19:19:56,612 - INFO - root - --------------
+2025-03-16 19:19:56,612 - DEBUG - ChatBot - Received prompt:  Bye!
+2025-03-16 19:19:56,612 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:19:56,613 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x76635cb89890>
+2025-03-16 19:19:56,613 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:19:56,613 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:19:56,613 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:19:56,613 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:19:56,613 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:19:56,657 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:19:56 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:19:56,657 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:19:56,657 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:19:56,739 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:19:56,739 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:19:56,739 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:19:56,739 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:19:56,740 - INFO - root - --------------
+2025-03-16 19:19:56,740 - INFO - root - BOT: Hey! What’s on your mind today? 😊
+2025-03-16 19:19:56,740 - INFO - root - --------------
+2025-03-16 19:19:56,745 - WARNING - phonemizer - words count mismatch on 100.0% of the lines (1/1)
+2025-03-16 19:20:01,539 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:20:03,527 - INFO - faster_whisper - Detected language 'en' with probability 0.51
+2025-03-16 19:20:03,528 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:20:05,437 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:20:05,437 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:20:05,437 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:20:05,437 - INFO - root - --------------
+2025-03-16 19:20:05,437 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:20:05,437 - INFO - root - --------------
+2025-03-16 19:20:05,438 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:20:05,438 - DEBUG - httpcore.connection - close.started
+2025-03-16 19:20:05,438 - DEBUG - httpcore.connection - close.complete
+2025-03-16 19:20:05,438 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:20:05,438 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x76635cb88610>
+2025-03-16 19:20:05,438 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:20:05,438 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:20:05,438 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:20:05,438 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:20:05,438 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:20:05,474 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:20:05 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:20:05,474 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:20:05,474 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:20:05,474 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:20:05,474 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:20:05,474 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:20:05,474 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:20:05,474 - INFO - root - --------------
+2025-03-16 19:20:05,474 - INFO - root - BOT: 
+2025-03-16 19:20:05,474 - INFO - root - --------------
+2025-03-16 19:20:05,483 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:20:07,333 - INFO - faster_whisper - Detected language 'en' with probability 0.54
+2025-03-16 19:20:07,335 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:20:09,246 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:20:09,246 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:20:09,246 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:20:09,246 - INFO - root - --------------
+2025-03-16 19:20:09,246 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:20:09,246 - INFO - root - --------------
+2025-03-16 19:20:09,246 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:20:09,246 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:20:09,246 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:20:09,247 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:20:09,247 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:20:09,247 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:20:09,280 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:20:09 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:20:09,280 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:20:09,280 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:20:09,280 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:20:09,280 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:20:09,280 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:20:09,280 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:20:09,280 - INFO - root - --------------
+2025-03-16 19:20:09,280 - INFO - root - BOT: 
+2025-03-16 19:20:09,280 - INFO - root - --------------
+2025-03-16 19:20:09,291 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:20:11,254 - INFO - faster_whisper - Detected language 'en' with probability 0.30
+2025-03-16 19:20:11,255 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:20:13,323 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:20:13,323 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:20:13,323 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:20:13,323 - INFO - root - --------------
+2025-03-16 19:20:13,323 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:20:13,323 - INFO - root - --------------
+2025-03-16 19:20:13,323 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:20:13,324 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:20:13,324 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:20:13,324 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:20:13,324 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:20:13,324 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:20:13,361 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:20:13 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:20:13,361 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:20:13,362 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:20:13,362 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:20:13,362 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:20:13,362 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:20:13,362 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:20:13,362 - INFO - root - --------------
+2025-03-16 19:20:13,362 - INFO - root - BOT: 
+2025-03-16 19:20:13,362 - INFO - root - --------------
+2025-03-16 19:20:13,370 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:20:15,365 - INFO - faster_whisper - Detected language 'ru' with probability 0.38
+2025-03-16 19:20:15,366 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:20:17,582 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:20:17,582 - INFO - SpeechProcessor - USER:  Я хочу бурить дырки
+2025-03-16 19:20:17,582 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:20:17,582 - INFO - root - --------------
+2025-03-16 19:20:17,582 - INFO - root - USER:  Я хочу бурить дырки
+2025-03-16 19:20:17,582 - INFO - root - --------------
+2025-03-16 19:20:17,582 - DEBUG - ChatBot - Received prompt:  Я хочу бурить дырки
+2025-03-16 19:20:17,582 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:20:17,582 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:20:17,582 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:20:17,582 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:20:17,583 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:20:17,622 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:20:17 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:20:17,622 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:20:17,622 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:20:17,773 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:20:17,773 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:20:17,773 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:20:17,773 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:20:17,773 - INFO - root - --------------
+2025-03-16 19:20:17,773 - INFO - root - BOT: Let me know what you’re planning – it sounds like you’re thinking about something exciting!
+2025-03-16 19:20:17,773 - INFO - root - --------------
+2025-03-16 19:20:17,778 - WARNING - phonemizer - words count mismatch on 100.0% of the lines (1/1)
+2025-03-16 19:20:22,505 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:20:23,293 - WARNING - root - Interruption detected, shutting down...
+2025-03-16 19:20:24,554 - INFO - faster_whisper - Detected language 'fr' with probability 0.24
+2025-03-16 19:20:24,555 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:20:26,898 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:20:26,898 - INFO - SpeechProcessor - USER:  Après tu fous ralentissier, ok ?
+2025-03-16 19:20:26,898 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:20:26,898 - INFO - root - --------------
+2025-03-16 19:20:26,898 - INFO - root - USER:  Après tu fous ralentissier, ok ?
+2025-03-16 19:20:26,898 - INFO - root - --------------
+2025-03-16 19:20:26,898 - DEBUG - ChatBot - Received prompt:  Après tu fous ralentissier, ok ?
+2025-03-16 19:20:26,899 - DEBUG - httpcore.connection - close.started
+2025-03-16 19:20:26,899 - DEBUG - httpcore.connection - close.complete
+2025-03-16 19:20:26,899 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:20:26,899 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x76635cbad290>
+2025-03-16 19:20:26,899 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:20:26,899 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:20:26,899 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:20:26,899 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:20:26,899 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:20:26,937 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:20:26 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:20:26,937 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:20:26,937 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:20:26,937 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:20:26,937 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:20:26,937 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:20:26,937 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:20:26,937 - INFO - root - --------------
+2025-03-16 19:20:26,937 - INFO - root - BOT: 
+2025-03-16 19:20:26,937 - INFO - root - --------------
+2025-03-16 19:20:26,944 - WARNING - root - Interruption detected, shutting down...
+2025-03-16 19:21:38,226 - WARNING - phonemizer - words count mismatch on 200.0% of the lines (2/1)
+2025-03-16 19:21:41,413 - WARNING - root - Interruption detected, shutting down...
+2025-03-16 19:21:49,239 - WARNING - root - Interruption detected, shutting down...
+2025-03-16 19:22:45,826 - DEBUG - httpx - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-03-16 19:22:45,826 - DEBUG - httpx - load_verify_locations cafile='/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/certifi/cacert.pem'
+2025-03-16 19:22:45,838 - INFO - root - Initializing Weebo...
+2025-03-16 19:22:45,838 - INFO - TextToSpeech - Initializing TextToSpeech...
+2025-03-16 19:22:46,589 - INFO - SpeechProcessor - Initializing SpeechProcessor...
+2025-03-16 19:22:46,589 - INFO - SpeechProcessor - Loading Whisper model: medium on cpu with compute type int8
+2025-03-16 19:22:46,637 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): huggingface.co:443
+2025-03-16 19:22:46,790 - DEBUG - urllib3.connectionpool - https://huggingface.co:443 "GET /api/models/Systran/faster-whisper-medium/revision/main HTTP/1.1" 200 2140
+2025-03-16 19:22:47,798 - INFO - ChatBot - Initializing ChatBot...
+2025-03-16 19:22:47,798 - INFO - SpeechProcessor - Starting recording...
+2025-03-16 19:22:49,752 - INFO - faster_whisper - Processing audio with duration 00:02.864
+2025-03-16 19:22:51,867 - INFO - faster_whisper - Detected language 'en' with probability 0.37
+2025-03-16 19:22:51,868 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:22:54,070 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:22:54,070 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:22:54,070 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:22:54,070 - INFO - root - --------------
+2025-03-16 19:22:54,070 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:22:54,070 - INFO - root - --------------
+2025-03-16 19:22:54,070 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:22:54,071 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:22:54,071 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7d589fd85390>
+2025-03-16 19:22:54,071 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:22:54,071 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:22:54,071 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:22:54,071 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:22:54,071 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:22:54,109 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:22:54 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:22:54,109 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:22:54,109 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:22:54,244 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:22:54,244 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:22:54,244 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:22:54,244 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:22:54,244 - INFO - root - --------------
+2025-03-16 19:22:54,244 - INFO - root - BOT: You’re very welcome! It was a pleasure chatting with you. 😊
+2025-03-16 19:22:54,244 - INFO - root - --------------
+2025-03-16 19:22:54,250 - WARNING - phonemizer - words count mismatch on 200.0% of the lines (2/1)
+2025-03-16 19:23:00,129 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:23:02,016 - INFO - faster_whisper - Detected language 'en' with probability 0.36
+2025-03-16 19:23:02,016 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:23:04,016 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:23:04,016 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:23:04,016 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:23:04,016 - INFO - root - --------------
+2025-03-16 19:23:04,016 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:23:04,016 - INFO - root - --------------
+2025-03-16 19:23:04,016 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:23:04,017 - DEBUG - httpcore.connection - close.started
+2025-03-16 19:23:04,017 - DEBUG - httpcore.connection - close.complete
+2025-03-16 19:23:04,017 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:23:04,017 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7d58a0507210>
+2025-03-16 19:23:04,017 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:23:04,017 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:23:04,017 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:23:04,017 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:23:04,017 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:23:04,083 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:23:04 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:23:04,083 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:23:04,083 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:23:04,083 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:23:04,083 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:23:04,083 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:23:04,083 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:23:04,083 - INFO - root - --------------
+2025-03-16 19:23:04,083 - INFO - root - BOT: I'm sorry, I don't understand what you're asking.
+2025-03-16 19:23:04,083 - INFO - root - --------------
+2025-03-16 19:23:07,427 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:23:09,315 - INFO - faster_whisper - Detected language 'en' with probability 0.54
+2025-03-16 19:23:09,316 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:23:11,336 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:23:11,336 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:23:11,336 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:23:11,336 - INFO - root - --------------
+2025-03-16 19:23:11,336 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:23:11,336 - INFO - root - --------------
+2025-03-16 19:23:11,336 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:23:11,337 - DEBUG - httpcore.connection - close.started
+2025-03-16 19:23:11,337 - DEBUG - httpcore.connection - close.complete
+2025-03-16 19:23:11,337 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:23:11,337 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7d589fda3910>
+2025-03-16 19:23:11,337 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:23:11,337 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:23:11,337 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:23:11,337 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:23:11,337 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:23:11,373 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:23:11 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:23:11,373 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:23:11,374 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:23:11,513 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:23:11,513 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:23:11,513 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:23:11,513 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:23:11,513 - INFO - root - --------------
+2025-03-16 19:23:11,513 - INFO - root - BOT:   Could you please rephrase your question or tell me what you were hoping to discuss?
+2025-03-16 19:23:11,513 - INFO - root - --------------
+2025-03-16 19:23:16,381 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:23:18,376 - INFO - faster_whisper - Detected language 'en' with probability 0.45
+2025-03-16 19:23:18,377 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:23:20,315 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:23:20,315 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:23:20,315 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:23:20,315 - INFO - root - --------------
+2025-03-16 19:23:20,315 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:23:20,315 - INFO - root - --------------
+2025-03-16 19:23:20,315 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:23:20,315 - DEBUG - httpcore.connection - close.started
+2025-03-16 19:23:20,315 - DEBUG - httpcore.connection - close.complete
+2025-03-16 19:23:20,315 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:23:20,315 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7d58a0571f10>
+2025-03-16 19:23:20,315 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:23:20,316 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:23:20,316 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:23:20,316 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:23:20,316 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:23:20,354 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:23:20 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:23:20,354 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:23:20,354 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:23:20,354 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:23:20,354 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:23:20,354 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:23:20,354 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:23:20,354 - INFO - root - --------------
+2025-03-16 19:23:20,354 - INFO - root - BOT: I'm sorry, I don't understand what you're asking.
+2025-03-16 19:23:20,354 - INFO - root - --------------
+2025-03-16 19:23:23,687 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:23:25,573 - INFO - faster_whisper - Detected language 'en' with probability 0.44
+2025-03-16 19:23:25,574 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:23:27,695 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:23:27,695 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:23:27,695 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:23:27,695 - INFO - root - --------------
+2025-03-16 19:23:27,695 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:23:27,695 - INFO - root - --------------
+2025-03-16 19:23:27,695 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:23:27,695 - DEBUG - httpcore.connection - close.started
+2025-03-16 19:23:27,695 - DEBUG - httpcore.connection - close.complete
+2025-03-16 19:23:27,695 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:23:27,695 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7d589fd679d0>
+2025-03-16 19:23:27,695 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:23:27,695 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:23:27,695 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:23:27,695 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:23:27,695 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:23:27,735 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:23:27 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:23:27,736 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:23:27,736 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:23:27,736 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:23:27,736 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:23:27,736 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:23:27,736 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:23:27,736 - INFO - root - --------------
+2025-03-16 19:23:27,736 - INFO - root - BOT: I'm sorry, I don't understand what you're asking.
+2025-03-16 19:23:27,736 - INFO - root - --------------
+2025-03-16 19:23:31,061 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:23:31,444 - WARNING - root - Interruption detected, shutting down...
+2025-03-16 19:23:32,921 - INFO - faster_whisper - Detected language 'nn' with probability 0.62
+2025-03-16 19:23:32,922 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:23:34,931 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:23:34,931 - INFO - SpeechProcessor - USER:  Thank you for watching.
+2025-03-16 19:23:34,931 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:23:34,931 - INFO - root - --------------
+2025-03-16 19:23:34,931 - INFO - root - USER:  Thank you for watching.
+2025-03-16 19:23:34,931 - INFO - root - --------------
+2025-03-16 19:23:34,931 - DEBUG - ChatBot - Received prompt:  Thank you for watching.
+2025-03-16 19:23:34,932 - DEBUG - httpcore.connection - close.started
+2025-03-16 19:23:34,932 - DEBUG - httpcore.connection - close.complete
+2025-03-16 19:23:34,932 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:23:34,932 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7d58a05a9750>
+2025-03-16 19:23:34,932 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:23:34,932 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:23:34,932 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:23:34,932 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:23:34,932 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:23:34,981 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:23:34 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:23:34,981 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:23:34,981 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:23:34,981 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:23:34,981 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:23:34,981 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:23:34,981 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:23:34,981 - INFO - root - --------------
+2025-03-16 19:23:34,981 - INFO - root - BOT: I'm sorry, I don't understand what you're asking.
+2025-03-16 19:23:34,981 - INFO - root - --------------
+2025-03-16 19:23:38,298 - WARNING - root - Interruption detected, shutting down...
+2025-03-16 19:25:13,469 - DEBUG - httpx - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-03-16 19:25:13,469 - DEBUG - httpx - load_verify_locations cafile='/home/cook/Documents/virtual-env/weebo/lib/python3.11/site-packages/certifi/cacert.pem'
+2025-03-16 19:25:13,481 - INFO - root - Initializing Weebo...
+2025-03-16 19:25:13,481 - INFO - TextToSpeech - Initializing TextToSpeech...
+2025-03-16 19:25:14,246 - INFO - SpeechProcessor - Initializing SpeechProcessor...
+2025-03-16 19:25:14,246 - INFO - SpeechProcessor - Loading Whisper model: medium on cpu with compute type int8
+2025-03-16 19:25:14,295 - DEBUG - urllib3.connectionpool - Starting new HTTPS connection (1): huggingface.co:443
+2025-03-16 19:25:14,459 - DEBUG - urllib3.connectionpool - https://huggingface.co:443 "GET /api/models/Systran/faster-whisper-medium/revision/main HTTP/1.1" 200 2140
+2025-03-16 19:25:15,478 - INFO - ChatBot - Initializing ChatBot...
+2025-03-16 19:25:15,478 - INFO - SpeechProcessor - Starting recording...
+2025-03-16 19:25:19,226 - INFO - faster_whisper - Processing audio with duration 00:05.547
+2025-03-16 19:25:21,438 - INFO - faster_whisper - Detected language 'en' with probability 0.76
+2025-03-16 19:25:21,439 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:25:23,543 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:25:23,543 - INFO - SpeechProcessor - USER:  Hello, man.
+2025-03-16 19:25:23,543 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:25:23,543 - INFO - root - --------------
+2025-03-16 19:25:23,543 - INFO - root - USER:  Hello, man.
+2025-03-16 19:25:23,543 - INFO - root - --------------
+2025-03-16 19:25:23,543 - DEBUG - ChatBot - Received prompt:  Hello, man.
+2025-03-16 19:25:23,544 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:25:23,544 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x70f2d01d54d0>
+2025-03-16 19:25:23,544 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:25:23,544 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:25:23,544 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:25:23,544 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:25:23,544 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:25:23,581 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:25:23 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:25:23,581 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:25:23,581 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:25:23,657 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:25:23,657 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:25:23,657 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:25:23,657 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:25:23,657 - INFO - root - --------------
+2025-03-16 19:25:23,657 - INFO - root - BOT: Hey! What’s on your mind today?
+2025-03-16 19:25:23,657 - INFO - root - --------------
+2025-03-16 19:25:26,354 - INFO - faster_whisper - Processing audio with duration 00:02.261
+2025-03-16 19:25:28,364 - INFO - faster_whisper - Detected language 'en' with probability 0.50
+2025-03-16 19:25:28,365 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:25:30,390 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:25:30,390 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:25:30,390 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:25:30,390 - INFO - root - --------------
+2025-03-16 19:25:30,390 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:25:30,390 - INFO - root - --------------
+2025-03-16 19:25:30,390 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:25:30,391 - DEBUG - httpcore.connection - close.started
+2025-03-16 19:25:30,391 - DEBUG - httpcore.connection - close.complete
+2025-03-16 19:25:30,391 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:25:30,391 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x70f2d3307110>
+2025-03-16 19:25:30,391 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:25:30,391 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:25:30,391 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:25:30,391 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:25:30,391 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:25:30,441 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:25:30 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:25:30,442 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:25:30,442 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:25:30,450 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:25:30,450 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:25:30,450 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:25:30,450 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:25:30,451 - INFO - root - --------------
+2025-03-16 19:25:30,451 - INFO - root - BOT:  😊
+2025-03-16 19:25:30,451 - INFO - root - --------------
+2025-03-16 19:25:30,456 - WARNING - phonemizer - words count mismatch on 100.0% of the lines (1/1)
+2025-03-16 19:25:33,178 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:25:34,996 - INFO - faster_whisper - Detected language 'nn' with probability 0.40
+2025-03-16 19:25:34,997 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:25:37,004 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:25:37,004 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:25:37,004 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:25:37,004 - INFO - root - --------------
+2025-03-16 19:25:37,004 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:25:37,004 - INFO - root - --------------
+2025-03-16 19:25:37,004 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:25:37,004 - DEBUG - httpcore.connection - close.started
+2025-03-16 19:25:37,004 - DEBUG - httpcore.connection - close.complete
+2025-03-16 19:25:37,004 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:25:37,004 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x70f2d01f3910>
+2025-03-16 19:25:37,004 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:25:37,004 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:25:37,004 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:25:37,004 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:25:37,005 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:25:37,039 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:25:37 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:25:37,039 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:25:37,039 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:25:37,040 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:25:37,040 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:25:37,040 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:25:37,040 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:25:37,040 - INFO - root - --------------
+2025-03-16 19:25:37,040 - INFO - root - BOT: I'm sorry, I don't understand what you're asking.
+2025-03-16 19:25:37,040 - INFO - root - --------------
+2025-03-16 19:25:40,379 - INFO - faster_whisper - Processing audio with duration 00:02.260
+2025-03-16 19:25:42,320 - INFO - faster_whisper - Detected language 'en' with probability 0.39
+2025-03-16 19:25:42,321 - DEBUG - faster_whisper - Processing segment at 00:00.000
+2025-03-16 19:25:44,431 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:25:44,431 - INFO - SpeechProcessor - USER:  Thanks for watching!
+2025-03-16 19:25:44,431 - INFO - SpeechProcessor - --------------------
+2025-03-16 19:25:44,431 - INFO - root - --------------
+2025-03-16 19:25:44,431 - INFO - root - USER:  Thanks for watching!
+2025-03-16 19:25:44,431 - INFO - root - --------------
+2025-03-16 19:25:44,431 - DEBUG - ChatBot - Received prompt:  Thanks for watching!
+2025-03-16 19:25:44,432 - DEBUG - httpcore.connection - close.started
+2025-03-16 19:25:44,432 - DEBUG - httpcore.connection - close.complete
+2025-03-16 19:25:44,432 - DEBUG - httpcore.connection - connect_tcp.started host='127.0.0.1' port=11434 local_address=None timeout=None socket_options=None
+2025-03-16 19:25:44,432 - DEBUG - httpcore.connection - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x70f2d3371d90>
+2025-03-16 19:25:44,432 - DEBUG - httpcore.http11 - send_request_headers.started request=<Request [b'POST']>
+2025-03-16 19:25:44,432 - DEBUG - httpcore.http11 - send_request_headers.complete
+2025-03-16 19:25:44,432 - DEBUG - httpcore.http11 - send_request_body.started request=<Request [b'POST']>
+2025-03-16 19:25:44,432 - DEBUG - httpcore.http11 - send_request_body.complete
+2025-03-16 19:25:44,432 - DEBUG - httpcore.http11 - receive_response_headers.started request=<Request [b'POST']>
+2025-03-16 19:25:44,469 - DEBUG - httpcore.http11 - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Content-Type', b'application/x-ndjson'), (b'Date', b'Sun, 16 Mar 2025 18:25:44 GMT'), (b'Transfer-Encoding', b'chunked')])
+2025-03-16 19:25:44,470 - INFO - httpx - HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+2025-03-16 19:25:44,470 - DEBUG - httpcore.http11 - receive_response_body.started request=<Request [b'POST']>
+2025-03-16 19:25:44,603 - DEBUG - httpcore.http11 - receive_response_body.complete
+2025-03-16 19:25:44,603 - DEBUG - httpcore.http11 - response_closed.started
+2025-03-16 19:25:44,603 - DEBUG - httpcore.http11 - response_closed.complete
+2025-03-16 19:25:44,603 - INFO - ChatBot - Generated response successfully.
+2025-03-16 19:25:44,603 - INFO - root - --------------
+2025-03-16 19:25:44,603 - INFO - root - BOT:  Can you rephrase your question or tell me what you’d like to talk about?
+2025-03-16 19:25:44,603 - INFO - root - --------------
+2025-03-16 19:25:45,851 - WARNING - root - Interruption detected, shutting down...
+2025-03-16 19:25:48,787 - WARNING - root - Interruption detected, shutting down...
