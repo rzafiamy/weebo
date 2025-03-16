@@ -78,3 +78,5 @@ torchaudio
 ctranslate2>=4.5.0
 faster-whisper
 python-dotenv
+silero-vad
+torchvision

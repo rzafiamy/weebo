@@ -5,12 +5,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Audio settings
-SAMPLE_RATE = int(os.getenv("SAMPLE_RATE", 24000))
 WHISPER_SAMPLE_RATE = int(os.getenv("WHISPER_SAMPLE_RATE", 16000))
-SILENCE_THRESHOLD = float(os.getenv("SILENCE_THRESHOLD", 0.02))
-SILENCE_DURATION = float(os.getenv("SILENCE_DURATION", 1.5))
+SILENCE_THRESHOLD = float(os.getenv("SILENCE_THRESHOLD", 0.04))
+SILENCE_DURATION = float(os.getenv("SILENCE_DURATION", 3))
 
 # Text-to-Speech settings
+SAMPLE_RATE = int(os.getenv("SAMPLE_RATE", 24000))
 MAX_PHONEME_LENGTH = int(os.getenv("MAX_PHONEME_LENGTH", 510))
 CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", 300))
 SPEED = float(os.getenv("SPEED", 1.2))

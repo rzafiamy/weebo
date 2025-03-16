@@ -45,49 +45,62 @@ class SpeechProcessor:
             self.logger.error(f"Missing configuration value: {e}")
             raise
 
-    def record_and_transcribe(self, callback):
-        """Records audio from the microphone and transcribes speech when silence is detected."""
-        self.logger.info("Starting recording...")
-        audio_buffer = []  # Stores recorded audio samples
-        silence_frames = 0  # Counter to track silence duration
+    def record_and_transcribe(self, callback, audio_playing_event):
+        """Continuously records audio but stops and restarts cleanly after playback."""
+        
+        self.logger.info("🎙 Starting recording...")
+        
+        while not self.shutdown_event.is_set():
+            if audio_playing_event.is_set():
+                self.logger.debug("🎤 Recording paused (bot is speaking)...")
+                while audio_playing_event.is_set():
+                    time.sleep(0.1)  # Wait until playback finishes
+                self.logger.debug("🎤 Restarting recording...")
 
-        def audio_callback(indata, frames, time_info, status):
-            """Processes audio input in real-time, detecting speech and silence."""
-            if self.shutdown_event.is_set():
-                raise sd.CallbackStop()
+            audio_buffer = []
+            silence_frames = 0
 
-            if status:
-                self.logger.warning(f"Input stream status: {status}")
+            def audio_callback(indata, frames, time_info, status):
+                """Processes microphone input in real-time."""
+                nonlocal silence_frames, audio_buffer
 
-            audio = indata.flatten()
-            level = np.abs(audio).mean()
-            audio_buffer.extend(audio.tolist())
+                if self.shutdown_event.is_set():
+                    raise sd.CallbackStop()
 
-            nonlocal silence_frames
-            if level < self.silence_threshold:
-                silence_frames += len(audio)  # Accumulate silence frames
-            else:
-                silence_frames = 0  # Reset silence counter when speech is detected
+                if status:
+                    self.logger.warning(f"Input stream status: {status}")
 
-            # If silence exceeds the threshold, process the buffered audio
-            if silence_frames > self.silence_duration * self.sample_rate:
-                audio_segment = np.array(audio_buffer, dtype=np.float32)
-                if len(audio_segment) > self.sample_rate:  # Ensure minimum length for transcription
-                    try:
-                        segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
-                        text = " ".join(segment.text for segment in segments if segment.text.strip())
-                        if text.strip():
-                            self.logger.info("--------------------")
-                            self.logger.info(f"USER: {text}")
-                            self.logger.info("--------------------")
-                            callback(text)  # Pass transcribed text to callback
-                    except Exception as e:
-                        self.logger.exception("Error occurred during transcription.")
-                
-                audio_buffer.clear()
-                silence_frames = 0
+                audio = indata.flatten()
+                level = np.abs(audio).mean()
+                audio_buffer.extend(audio.tolist())
 
-        # Start recording with a non-blocking stream
-        with sd.InputStream(callback=audio_callback, channels=1, samplerate=self.sample_rate, dtype=np.float32):
-            while not self.shutdown_event.is_set():
-                sd.sleep(100)  # Sleep briefly to allow processing of the audio stream
+                if level < self.silence_threshold:
+                    silence_frames += len(audio)
+                else:
+                    silence_frames = 0  # Reset silence counter when speech is detected
+
+                # Process audio when silence is detected
+                if silence_frames > self.silence_duration * self.sample_rate:
+                    self.logger.info("🛑 Silence detected, processing transcription...")
+
+                    audio_segment = np.array(audio_buffer, dtype=np.float32)
+                    if len(audio_segment) > self.sample_rate:  # Ensure minimum length
+                        try:
+                            segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
+                            text = " ".join(segment.text for segment in segments if segment.text.strip())
+
+                            if text.strip():
+                                callback(text)  # 🟢 Send text to chatbot
+
+                        except Exception as e:
+                            self.logger.exception("❌ Error during transcription.")
+
+                    # 🔄 Reset the buffer and silence counter
+                    audio_buffer.clear()
+                    silence_frames = 0
+
+            # Start a fresh recording stream
+            self.logger.debug("🎙 Starting new microphone stream...")
+            with sd.InputStream(callback=audio_callback, channels=1, samplerate=self.sample_rate, dtype=np.float32):
+                while not self.shutdown_event.is_set() and not audio_playing_event.is_set():
+                    sd.sleep(100)  # Allow stream to process

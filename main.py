@@ -1,6 +1,6 @@
 import signal
-from typing import Dict, Optional
 from concurrent.futures import ThreadPoolExecutor
+from threading import Event, Lock
 from core.tts import TextToSpeech
 from core.speech import SpeechProcessor
 from core.chatbot import ChatBot
@@ -8,6 +8,7 @@ import sounddevice as sd
 import numpy as np
 import config
 import logging
+import time
 
 # Logging Configuration
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -20,40 +21,52 @@ class Weebo:
         self.speech_processor = SpeechProcessor()
         self.chatbot = ChatBot()
         self.executor = ThreadPoolExecutor(max_workers=config.MAX_THREADS)
+
+        self.audio_playing_event = Event()  # Blocks recording when audio is playing
+        self.processing_lock = Lock()  # Ensures chatbot processing is sequential
+
         signal.signal(signal.SIGINT, self._signal_handler)
 
     def _signal_handler(self, signum, frame):
-        """
-        Handle interrupt signal to shut down the Weebo instance.
-        """
+        """Handle interrupt signal to shut down the Weebo instance."""
         logging.warning("Interruption detected, shutting down...")
         self.speech_processor.shutdown_event.set()
 
     def handle_user_input(self, text: str):
-        """
-        Handle user input and generate response.
-        """
-        logging.info("--------------")
-        logging.info(f"USER: {text}")
-        logging.info("--------------")
-        response = self.chatbot.generate_response(text)
-        logging.info("--------------")
-        logging.info(f"BOT: {response}")
-        logging.info("--------------")
-        phonemes = self.tts.phonemize(response)
-        audio = self.tts.generate_audio(phonemes, config.VOICE, config.SPEED)
-        self.play_audio(audio)
+        """Process user input -> chatbot -> play response."""
+        with self.processing_lock:  # Ensures strict order of execution
+            logging.info("--------------")
+            logging.info(f"USER: {text}")
+            logging.info("--------------")
+
+            response = self.chatbot.generate_response(text)
+
+            logging.info("--------------")
+            logging.info(f"BOT: {response}")
+            logging.info("--------------")
+
+            phonemes = self.tts.phonemize(response)
+            audio = self.tts.generate_audio(phonemes, config.VOICE, config.SPEED)
+
+            self.play_audio(audio)  # Block recording while playing
 
     def play_audio(self, audio_data):
-        """Play audio data using sounddevice."""
+        """Stops recording, plays audio, and restarts recording."""
+        self.audio_playing_event.set()  # 🔴 Stop recording
+        logging.info("🔊 Playing audio... Recording is stopped.")
+
         with sd.OutputStream(samplerate=config.SAMPLE_RATE, channels=1, dtype=np.float32) as out_stream:
             out_stream.write(audio_data.reshape(-1, 1))
 
+        logging.info("✅ Audio playback finished. Restarting recording.")
+
+        time.sleep(0.2)  # Small delay before restarting
+        self.audio_playing_event.clear()  # 🟢 Allow recording to start again
+
+
     def start(self):
-        """
-        Start the speech processor and handle user input.
-        """
-        self.speech_processor.record_and_transcribe(self.handle_user_input)
+        """Start recording and sequentially process speech input."""
+        self.speech_processor.record_and_transcribe(self.handle_user_input, self.audio_playing_event)
 
 
 if __name__ == "__main__":
