@@ -9,13 +9,18 @@ import sounddevice as sd
 from phonemizer.backend.espeak.wrapper import EspeakWrapper
 import espeakng_loader
 from ollama import chat
-from lightning_whisper_mlx import LightningWhisperMLX
+from faster_whisper import WhisperModel
 import signal
 from threading import Event
+import torch
+import logging
 
+# Configuration du logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Weebo:
     def __init__(self):
+        logging.info("Initialisation de Weebo...")
         # audio settings
         self.SAMPLE_RATE = 24000
         self.WHISPER_SAMPLE_RATE = 16000
@@ -43,12 +48,14 @@ class Weebo:
         # interrupt handling
         self.shutdown_event = Event()
         signal.signal(signal.SIGINT, self._signal_handler)
+        logging.info("Weebo initialisé avec succès!")
 
     def _signal_handler(self, signum, frame):
-        print("\nStopping...")
+        logging.warning("Interruption détectée, arrêt en cours...")
         self.shutdown_event.set()
 
     def _init_espeak(self):
+        logging.debug("Initialisation de eSpeak...")
         # setup espeak for phoneme generation
         espeak_data_path = espeakng_loader.get_data_path()
         espeak_lib_path = espeakng_loader.get_library_path()
@@ -59,6 +66,7 @@ class Weebo:
         self.vocab = self._create_vocab()
 
     def _init_models(self):
+        logging.debug("Chargement des modèles...")
         # init text-to-speech model
         self.tts_session = onnxruntime.InferenceSession(
             "kokoro-v0_19.onnx",
@@ -69,8 +77,13 @@ class Weebo:
         with open("voices.json") as f:
             self.voices = json.load(f)
 
-        # init speech recognition model
-        self.whisper_mlx = LightningWhisperMLX(model="small", batch_size=12)
+        # Load Whisper for Speech-to-Text
+        model_size = "medium"  # You can use "medium", "large-v3", etc.
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        self.whisper_model = WhisperModel(model_size, device=device, compute_type="float16" if device == "cuda" else "int8")
+
+
 
     def _create_vocab(self) -> Dict[str, int]:
         # create mapping of characters/phonemes to integer tokens
@@ -92,6 +105,7 @@ class Weebo:
         return "".join(p for p in phonemes.replace("r", "ɹ") if p in self.vocab).strip()
 
     def generate_audio(self, phonemes: str, voice: str, speed: float) -> np.ndarray:
+        logging.debug(f"Génération audio pour phonèmes: {phonemes}")
         # convert phonemes to audio using TTS model
         tokens = [self.vocab[p] for p in phonemes if p in self.vocab]
         if not tokens:
@@ -112,78 +126,57 @@ class Weebo:
         return audio
 
     def record_and_transcribe(self):
-        # state for audio recording
+        logging.info("Enregistrement en cours...")
         audio_buffer = []
         silence_frames = 0
-        total_frames = 0
 
         def callback(indata, frames, time_info, status):
-            # callback function that processes incoming audio frames
             if self.shutdown_event.is_set():
                 raise sd.CallbackStop()
-
-            nonlocal audio_buffer, silence_frames, total_frames
-
-            if status:
-                print(status)
-
+            
             audio = indata.flatten()
             level = np.abs(audio).mean()
-
             audio_buffer.extend(audio.tolist())
-            total_frames += len(audio)
 
-            # track silence duration
             if level < self.SILENCE_THRESHOLD:
+                nonlocal silence_frames
                 silence_frames += len(audio)
             else:
                 silence_frames = 0
 
-            # process audio when silence is detected
             if silence_frames > self.SILENCE_DURATION * self.SAMPLE_RATE:
                 audio_segment = np.array(audio_buffer, dtype=np.float32)
-
                 if len(audio_segment) > self.SAMPLE_RATE:
-                    text = self.whisper_mlx.transcribe(audio_segment)['text']
-
-                    # skip empty/invalid transcriptions
+                    segments, _ = self.whisper_model.transcribe(audio_segment, beam_size=5)
+                    segments = list(segments)  # Ensures the transcription runs before processing
+                    text = " ".join(segment.text for segment in segments)
                     if text.strip():
-                        print(f"Transcription: {text}")
-                        self.messages.append({
-                            'role': 'user',
-                            'content': text
-                        })
+                        logging.info("-------------------------------------------")
+                        logging.info(f"USER: {text}")
+                        logging.info("-------------------------------------------")
                         self.create_and_play_response(text)
-
-                # reset state
                 audio_buffer.clear()
                 silence_frames = 0
-                total_frames = 0
 
-        # start recording loop
-        try:
-            with sd.InputStream(
-                callback=callback,
-                channels=1,
-                samplerate=self.SAMPLE_RATE,
-                dtype=np.float32
-            ):
-                print("Recording... Press Ctrl+C to stop")
-                while not self.shutdown_event.is_set():
-                    sd.sleep(100)
-        except sd.CallbackStop:
-            pass
+        with sd.InputStream(callback=callback, channels=1, samplerate=self.SAMPLE_RATE, dtype=np.float32):
+            print("Recording... Press Ctrl+C to stop")
+            while not self.shutdown_event.is_set():
+                sd.sleep(100)
 
     def create_and_play_response(self, prompt: str):
-        if self.shutdown_event.is_set():
+        logging.info(f"Génération de réponse pour: {prompt}")
+        if self.shutdown_event.is_set() or prompt.strip() == "":
             return
 
         # stream response from llm
         stream = chat(
-            model='llama3.2',
+            model='gemma3:1B',
             messages=[{
                 'role': 'system',
                 'content': self.SYSTEM_PROMPT
+            }, {
+                'role': 'user',
+                'content': prompt
             }] + self.messages,
             stream=True,
         )
@@ -191,6 +184,7 @@ class Weebo:
         # state for processing response
         futures = []
         buffer = ""
+        bot = ""
         curr_str = ""
 
         try:
@@ -199,8 +193,10 @@ class Weebo:
                 if self.shutdown_event.is_set():
                     break
 
-                print(chunk)
+                # print(chunk)
                 text = chunk['message']['content']
+
+                bot += text
 
                 if len(text) == 0:
                     self.messages.append({
@@ -208,7 +204,7 @@ class Weebo:
                         'content': curr_str
                     })
                     curr_str = ""
-                    print(self.messages)
+                    #print(self.messages)
                     continue
 
                 buffer += text
@@ -259,6 +255,9 @@ class Weebo:
 
             # play generated audio
             if not self.shutdown_event.is_set():
+                logging.info("-----------------------------------")
+                logging.info(f"Bot: {bot}")
+                logging.info("-----------------------------------")
                 with sd.OutputStream(
                     samplerate=self.SAMPLE_RATE,
                     channels=1,
