@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Audio settings
-ASR_MODEL_SIZE = os.getenv("ASR_MODEL_SIZE", "small")  # Options: "medium", "large-v3", etc.
+ASR_MODEL_SIZE = os.getenv("ASR_MODEL_SIZE", "medium")  # Options: "medium", "large-v3", etc.
 DEVICE = "cpu" if os.getenv("USE_CUDA", "True").lower() == "true" else "cpu"
 COMPUTE_TYPE = "float16" if DEVICE == "cuda" else "int8"
 
@@ -25,7 +25,7 @@ NO_VOICE_REPLY = os.getenv("NO_VOICE", "I'm sorry, I don't understand what you'r
 MAX_THREADS = int(os.getenv("MAX_THREADS", 1))
 
 # Ollama settings
-MODEL=os.getenv("MODEL", "gemma3:1B")
+MODEL=os.getenv("MODEL", "llama3.1:latest")
 MAX_RETRIES = int(os.getenv("MAX_RETRIES", 3))
 RETRY_DELAY = float(os.getenv("RETRY_DELAY", 1))  # in seconds
 SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT", 
@@ -39,3 +39,11 @@ VOICES_FILE = os.getenv("VOICES_FILE", "voices.json")
 
 # Onnx
 ONNX_DEVICE = os.getenv("ONNX_DEVICE", "CUDAExecutionProvider") # Options: "CPUExecutionProvider"
+
+
+# EMBEDDINGS
+CHROMA_DB=os.getenv("CHROMA_DB", "chroma_store")  
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", 200))
+CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", 500))
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "nomic-embed-text")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")

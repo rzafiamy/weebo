@@ -16,6 +16,7 @@ The original Weebo is great for Apple Silicon, but not optimized for CUDA-based 
 ✅ Real-time text-to-speech synthesis with Kokoro-82M  
 ✅ Support for different voices 🎙️  
 ✅ Streaming response generation 📡  
+✅ Retrieval Augmented Generation using ChromaDB and PDFs
 
 ---
 
@@ -181,6 +182,7 @@ This document provides details on how to configure Weebo using environment varia
 | Variable         | Default Value  | Description |
 |-----------------|---------------|-------------|
 | `MODEL`         | `gemma3:1B`    | Model used for generating responses. |
+| `OLLAMA_BASE_URL` | `http://localhost:11434` | Base URL for Ollama models. |
 | `MAX_RETRIES`   | `3`           | Maximum number of retries in case of failure. |
 | `RETRY_DELAY`   | `1`           | Delay (in seconds) before retrying a failed request. |
 | `SYSTEM_PROMPT` | *(see below)* | System prompt for AI responses. |
@@ -204,6 +206,16 @@ This document provides details on how to configure Weebo using environment varia
 | Variable       | Default Value            | Description |
 |---------------|------------------------|-------------|
 | `ONNX_DEVICE` | `CUDAExecutionProvider` | ONNX execution provider. Options: `CPUExecutionProvider`, `CUDAExecutionProvider`. |
+
+---
+
+## 🖥️ Embedding Database
+
+| Variable       | Default Value            | Description |
+|---------------|------------------------|-------------|
+| `CHROMA_DB`    | `chroma_store`       | Path to the Chroma database. |
+| `CHUNK_SIZE` | 1024                    | Size of chunks for embedding. |
+| `CHUNK_OVERLAP` | 200                    | Overlap size for chunks. |
 
 ---
 

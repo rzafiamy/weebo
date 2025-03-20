@@ -4,23 +4,32 @@ from threading import Event, Lock
 from core.tts import TextToSpeech
 from core.speech import SpeechProcessor
 from core.chatbot import ChatBot
+from core.rag import RAG
 import sounddevice as sd
 import numpy as np
 import config
 import logging
 import time
+import os
 
 # Logging Configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 class Weebo:
-    def __init__(self):
+    def __init__(self, context):
         logging.info("Initializing Weebo...")
         self.tts = TextToSpeech()
         self.speech_processor = SpeechProcessor()
-        self.chatbot = ChatBot()
         self.executor = ThreadPoolExecutor(max_workers=config.MAX_THREADS)
+        self.file  = context
+        self.rag = RAG()  # Initialize the RAG system
+
+        if self.file and os.path.exists(self.file):
+            logging.info(f"File {self.file} exists. Ingesting...")
+            self.rag.ingest_pdfs([self.file])  # Ingest the PDF file
+        
+        self.chatbot = ChatBot(self.rag)
 
         self.audio_playing_event = Event()  # Blocks recording when audio is playing
         self.processing_lock = Lock()  # Ensures chatbot processing is sequential
@@ -70,5 +79,12 @@ class Weebo:
 
 
 if __name__ == "__main__":
-    weebo = Weebo()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="RAG System for PDF Ingestion and Querying")
+    parser.add_argument("--file")
+    
+    args = parser.parse_args()
+    
+    weebo = Weebo(args.file)
     weebo.start()

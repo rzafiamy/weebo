@@ -33,3 +33,5 @@ mlx_models/
 share/
 kokoro-v0_19.onnx
 *.log
+*.db
+chroma_store/
