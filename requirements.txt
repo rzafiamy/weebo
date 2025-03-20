@@ -80,3 +80,4 @@ faster-whisper
 python-dotenv
 silero-vad
 torchvision
+simpleaudio

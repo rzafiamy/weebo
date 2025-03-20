@@ -4,6 +4,7 @@ from faster_whisper import WhisperModel
 import config
 import logging
 import sounddevice as sd
+import simpleaudio as sa
 import numpy as np
 
 # Configure logging
@@ -45,17 +46,29 @@ class SpeechProcessor:
             self.logger.error(f"Missing configuration value: {e}")
             raise
 
+    def play_notification_sound(self):
+        """Plays the notification sound."""
+        try:
+            wave_obj = sa.WaveObject.from_wave_file("assets/notif.wav")
+            play_obj = wave_obj.play()
+            play_obj.wait_done()  # Wait until the sound finishes playing
+        except Exception as e:
+            logging.error(f"Failed to play notification sound: {e}")
+
     def record_and_transcribe(self, callback, audio_playing_event):
         """Continuously records audio but stops and restarts cleanly after playback."""
         
         self.logger.info("🎙 Starting recording...")
+        self.play_notification_sound()
         
         while not self.shutdown_event.is_set():
             if audio_playing_event.is_set():
                 self.logger.debug("🎤 Recording paused (bot is speaking)...")
+                self.play_notification_sound()
                 while audio_playing_event.is_set():
                     time.sleep(0.1)  # Wait until playback finishes
                 self.logger.debug("🎤 Restarting recording...")
+                self.play_notification_sound()
 
             audio_buffer = []
             silence_frames = 0
